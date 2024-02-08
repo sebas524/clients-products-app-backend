@@ -1,8 +1,12 @@
 package com.sebastian.clientsappbackend.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sebastian.clientsappbackend.entities.Client;
 import com.sebastian.clientsappbackend.services.ClientService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = { "http://localhost:4200" })
@@ -35,11 +41,12 @@ public class ClientController {
     public Client getClientById(@PathVariable Long id) {
 
         return clientService.findById(id);
+
     }
 
     @PostMapping("/clients")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Client saveClient(@RequestBody Client client) {
+    public Client saveClient(@Valid @RequestBody Client client) {
 
         return clientService.save(client);
 
@@ -47,7 +54,7 @@ public class ClientController {
 
     @PutMapping("/clients/{id}")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Client updateClient(@RequestBody Client client, @PathVariable long id) {
+    public Client updateClient(@Valid @RequestBody Client client, @PathVariable long id) {
         Client dbClient = clientService.findById(id);
 
         dbClient.setFirstName(client.getFirstName() != null ? client.getFirstName() : dbClient.getFirstName());
@@ -61,11 +68,8 @@ public class ClientController {
     @DeleteMapping("/clients/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     void deleteClientById(@PathVariable Long id) {
-        Client dbClient = getClientById(id);
-        if (dbClient == null) {
-            return;
-        }
-        clientService.delete(dbClient.getId());
+
+        clientService.delete(id);
     }
 
 }

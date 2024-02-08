@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,10 +26,15 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank(message = "first name cannot be left blank.")
     @Column(name = "first_name")
     private String firstName;
+    @NotBlank(message = "last name cannot be left blank.")
     @Column(name = "last_name")
     private String lastName;
+    @NotBlank
+    @Email(message = "email must contain @.")
+    @Column(unique = true)
     private String email;
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

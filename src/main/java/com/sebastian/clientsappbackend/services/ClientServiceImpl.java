@@ -1,11 +1,12 @@
 package com.sebastian.clientsappbackend.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sebastian.clientsappbackend.entities.Client;
+import com.sebastian.clientsappbackend.exceptions.ResourceNotFoundException;
 import com.sebastian.clientsappbackend.repositories.ClientRepository;
 
 @Service
@@ -27,7 +28,14 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client findById(Long id) {
 
-        return clientRepository.findById(id).orElse(null);
+        Optional<Client> dbClient = clientRepository.findById(id);
+
+        if (dbClient.isEmpty()) {
+            throw new ResourceNotFoundException("Client id provided not found.");
+
+        }
+
+        return dbClient.get();
     }
 
     @Override
@@ -38,7 +46,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void delete(Long id) {
-        clientRepository.deleteById(id);
+
+        Client dbClient = findById(id);
+
+        clientRepository.deleteById(dbClient.getId());
     }
 
 }
