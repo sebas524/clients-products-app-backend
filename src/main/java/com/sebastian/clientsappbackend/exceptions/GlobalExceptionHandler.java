@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -65,6 +66,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
+    // * to deal with unique value errors (like in the case of email):
+    @ExceptionHandler(DataIntegrityViolationException.class) // Handle DataIntegrityViolationException
+    public ResponseEntity<ErrorObjectModel> handleDuplicateEmailException(
+            DataIntegrityViolationException ex, WebRequest request) {
+
+        ErrorObjectModel errorObject = new ErrorObjectModel();
+
+        errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        errorObject.setMessage("Email already taken.");
+        errorObject.setTimeStamp(new Date());
+
+        return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);
+    }
+
     @Override
     @Nullable
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -77,7 +92,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(error -> error.getDefaultMessage())
                 .collect(Collectors.toList());
 
-        body.put("messages", errors);
+        body.put("message", errors);
 
         return new ResponseEntity<Object>(body, HttpStatus.BAD_REQUEST);
     }
