@@ -1,12 +1,9 @@
 package com.sebastian.clientsappbackend.controllers;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +30,8 @@ public class ClientController {
     }
 
     @GetMapping("/clients")
-    public List<Client> getAllClients() {
-        return clientService.findAll();
+    public List<Client> getAllClients(Pageable pageable) {
+        return clientService.findAll(pageable).toList();
     }
 
     @GetMapping("/clients/{id}")

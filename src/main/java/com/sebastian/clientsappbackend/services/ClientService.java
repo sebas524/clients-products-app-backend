@@ -1,12 +1,13 @@
 package com.sebastian.clientsappbackend.services;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.sebastian.clientsappbackend.entities.Client;
 
 public interface ClientService {
 
-    List<Client> findAll();
+    Page<Client> findAll(Pageable pageable);
 
     Client findById(Long id);
 

@@ -3,6 +3,8 @@ package com.sebastian.clientsappbackend.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sebastian.clientsappbackend.entities.Client;
@@ -18,11 +20,16 @@ public class ClientServiceImpl implements ClientService {
         this.clientRepository = clientRepository;
     }
 
+    // @Override
+    // public List<Client> findAll() {
+
+    // return (List<Client>) clientRepository.findAll();
+
+    // }
+
     @Override
-    public List<Client> findAll() {
-
-        return (List<Client>) clientRepository.findAll();
-
+    public Page<Client> findAll(Pageable pageable) {
+        return clientRepository.findAll(pageable);
     }
 
     @Override
