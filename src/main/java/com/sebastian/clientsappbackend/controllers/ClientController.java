@@ -2,8 +2,10 @@ package com.sebastian.clientsappbackend.controllers;
 
 import java.util.List;
 
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sebastian.clientsappbackend.entities.Client;
 import com.sebastian.clientsappbackend.services.ClientService;
@@ -66,7 +70,25 @@ public class ClientController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     void deleteClientById(@PathVariable Long id) {
 
+        Client client = clientService.findById(id);
+
+        clientService.deleteClientPrevImage(client);
+
         clientService.delete(id);
+    }
+
+    @PostMapping("/clients/upload")
+    public ResponseEntity<?> imageUpload(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id) {
+
+        return clientService.uploadImage(file, id);
+
+    }
+
+    @GetMapping("/clients/uploads/{imageName:.+}")
+    public ResponseEntity<Resource> getImage(@PathVariable String imageName) {
+
+        return clientService.getImage(imageName);
+
     }
 
 }

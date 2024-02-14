@@ -47,4 +47,7 @@ public class Client {
     @Column(name = "created_at")
     @Temporal(TemporalType.DATE)
     private Date createdAt;
+
+    private String image;
+
 }
