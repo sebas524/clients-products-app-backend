@@ -148,7 +148,16 @@ public class ClientServiceImpl implements ClientService {
 
         if (!resource.exists() && !resource.isReadable()) {
 
-            throw new RuntimeException("image could not be loaded." + imageName);
+            // * so if image where to be deleted, the no pic image will show:
+            filePath = Paths.get("src/main/resources/static/images").resolve("no-pic.png").toAbsolutePath();
+
+            try {
+                resource = new UrlResource(filePath.toUri());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            log.error("image could not be loaded." + imageName);
 
         }
 
