@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sebastian.clientsappbackend.entities.Client;
 import com.sebastian.clientsappbackend.services.ClientService;
+import com.sebastian.clientsappbackend.services.FileUploadService;
 
 import jakarta.validation.Valid;
 
@@ -28,6 +29,7 @@ import jakarta.validation.Valid;
 public class ClientController {
 
     private ClientService clientService;
+    private FileUploadService fileUploadService;
 
     public ClientController(ClientService clientService) {
         this.clientService = clientService;
@@ -71,9 +73,9 @@ public class ClientController {
     void deleteClientById(@PathVariable Long id) {
 
         Client client = clientService.findById(id);
+        String previousImage = client.getImage();
 
-        clientService.deleteClientPrevImage(client);
-
+        fileUploadService.delete(previousImage);
         clientService.delete(id);
     }
 

@@ -33,18 +33,15 @@ public class ClientServiceImpl implements ClientService {
 
     private ClientRepository clientRepository;
 
+    private FileUploadService fileUploadService;
+
     private final Logger log = LoggerFactory.getLogger(ClientServiceImpl.class);
 
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository, FileUploadService fileUploadService) {
         this.clientRepository = clientRepository;
+        this.fileUploadService = fileUploadService;
+
     }
-
-    // @Override
-    // public List<Client> findAll() {
-
-    // return (List<Client>) clientRepository.findAll();
-
-    // }
 
     @Override
     public Page<Client> findAll(Pageable pageable) {
@@ -87,19 +84,16 @@ public class ClientServiceImpl implements ClientService {
 
         if (!file.isEmpty()) {
 
-            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename().replace(" ", "");
-
-            Path filePath = Paths.get("uploads").resolve(fileName).toAbsolutePath();
-
-            log.info(filePath.toString());
-
+            String fileName = null;
             try {
-                Files.copy(file.getInputStream(), filePath);
+                fileName = fileUploadService.save(file);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            deleteClientPrevImage(client);
+            String previousFile = client.getImage();
+
+            fileUploadService.delete(previousFile);
 
             client.setImage(fileName);
 
@@ -115,50 +109,15 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void deleteClientPrevImage(Client client) {
-
-        String previousImageName = client.getImage();
-
-        if (previousImageName != null && previousImageName.length() > 0) {
-            Path previousImagePath = Paths.get("uploads").resolve(previousImageName).toAbsolutePath();
-            File previosImageFile = previousImagePath.toFile();
-            if (previosImageFile.exists() && previosImageFile.canRead()) {
-                previosImageFile.delete();
-
-            }
-
-        }
-
-    }
-
-    @Override
     public ResponseEntity<Resource> getImage(String imageName) {
 
-        Path filePath = Paths.get("uploads").resolve(imageName).toAbsolutePath();
-
-        log.info(filePath.toString());
-
         Resource resource = null;
-
         try {
-            resource = new UrlResource(filePath.toUri());
+            resource = fileUploadService.load(imageName);
+
         } catch (MalformedURLException e) {
+
             e.printStackTrace();
-        }
-
-        if (!resource.exists() && !resource.isReadable()) {
-
-            // * so if image where to be deleted, the no pic image will show:
-            filePath = Paths.get("src/main/resources/static/images").resolve("no-pic.png").toAbsolutePath();
-
-            try {
-                resource = new UrlResource(filePath.toUri());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-
-            log.error("image could not be loaded." + imageName);
-
         }
 
         HttpHeaders header = new HttpHeaders();

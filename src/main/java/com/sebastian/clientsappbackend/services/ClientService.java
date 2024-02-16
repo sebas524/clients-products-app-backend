@@ -20,7 +20,5 @@ public interface ClientService {
 
     ResponseEntity<?> uploadImage(MultipartFile file, Long id);
 
-    void deleteClientPrevImage(Client client);
-
     ResponseEntity<Resource> getImage(String imageName);
 }
