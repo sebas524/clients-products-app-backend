@@ -56,6 +56,7 @@ public class Client {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
     @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    @NotNull(message = "region cannot be left blank.")
     private Region region;
 
 }

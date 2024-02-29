@@ -1,5 +1,7 @@
 package com.sebastian.clientsappbackend.services;
 
+import java.util.List;
+
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sebastian.clientsappbackend.entities.Client;
+import com.sebastian.clientsappbackend.entities.Region;
 
 public interface ClientService {
 
@@ -21,4 +24,7 @@ public interface ClientService {
     ResponseEntity<?> uploadImage(MultipartFile file, Long id);
 
     ResponseEntity<Resource> getImage(String imageName);
+
+    public List<Region> findAllRegions();
+
 }

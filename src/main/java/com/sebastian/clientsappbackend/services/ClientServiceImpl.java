@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,9 +23,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sebastian.clientsappbackend.entities.Client;
+import com.sebastian.clientsappbackend.entities.Region;
 import com.sebastian.clientsappbackend.exceptions.ResourceNotFoundException;
 import com.sebastian.clientsappbackend.repositories.ClientRepository;
 
@@ -126,6 +129,13 @@ public class ClientServiceImpl implements ClientService {
 
         return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Region> findAllRegions() {
+
+        return clientRepository.findAllRegions();
     }
 
 }

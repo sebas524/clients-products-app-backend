@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sebastian.clientsappbackend.entities.Client;
+import com.sebastian.clientsappbackend.entities.Region;
 import com.sebastian.clientsappbackend.services.ClientService;
 import com.sebastian.clientsappbackend.services.FileUploadService;
 
@@ -63,6 +64,7 @@ public class ClientController {
         dbClient.setFirstName(client.getFirstName() != null ? client.getFirstName() : dbClient.getFirstName());
         dbClient.setLastName(client.getLastName() != null ? client.getLastName() : dbClient.getLastName());
         dbClient.setEmail(client.getEmail() != null ? client.getEmail() : dbClient.getEmail());
+        dbClient.setRegion(client.getRegion() != null ? client.getRegion() : dbClient.getRegion());
 
         return clientService.save(dbClient);
 
@@ -91,6 +93,11 @@ public class ClientController {
 
         return clientService.getImage(imageName);
 
+    }
+
+    @GetMapping("/clients/regions")
+    public List<Region> getAllRegions() {
+        return clientService.findAllRegions();
     }
 
 }
