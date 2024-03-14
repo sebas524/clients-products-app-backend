@@ -74,7 +74,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorObjectModel errorObject = new ErrorObjectModel();
 
         errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
-        errorObject.setMessage("Email already taken.");
+        errorObject.setMessage("Email / Username already taken.");
         errorObject.setTimeStamp(new Date());
 
         return new ResponseEntity<>(errorObject, HttpStatus.BAD_REQUEST);

@@ -5,6 +5,10 @@ insert into tbl_regions (id, name) values  (4,'Europe');
 insert into tbl_regions (id, name) values  (5,'Asia');
 insert into tbl_regions (id, name) values  (6,'Africa');
 
+insert into tbl_roles (id,name) values (1,"ROLE_ADMIN");
+insert into tbl_roles (id,name) values (2,"ROLE_USER");
+
+
 insert into tbl_clients(region_id, first_name,last_name,email,created_at)values(1,"john","velez","john@gmail.com","2023-01-01");
 insert into tbl_clients(region_id, first_name,last_name,email,created_at)values(2,"jenny","weinert","jenny@gmail.com","2020-01-01");
 insert into tbl_clients(region_id, first_name,last_name,email,created_at)values(1,"karl","johnson","karl@gmail.com","2021-01-01");
@@ -30,6 +34,22 @@ insert into tbl_clients(region_id, first_name,last_name,email,created_at)values(
 insert into tbl_clients(region_id, first_name,last_name,email,created_at)values(5,"karl","johnson","3karl@gmail.com","2021-01-01");
 insert into tbl_clients(region_id, first_name,last_name,email,created_at)values(5,"james","dean","3james@gmail.com","2022-01-01");
 insert into tbl_clients(region_id, first_name,last_name,email,created_at)values(3,"bob","mole","3bob@gmail.com","2023-01-01");
+
+
+insert into tbl_users(enabled, id, username, password)values(1,1,"johnny","123456");
+insert into tbl_users(enabled, id, username, password)values(1,2,"broc","123456");
+insert into tbl_users(enabled, id, username, password)values(1,3,"sammy","123456");
+
+
+
+
+insert into user_roles(role_id, user_id)values(1,1);
+insert into user_roles(role_id, user_id)values(2,1);
+insert into user_roles(role_id, user_id)values(1,2);
+insert into user_roles(role_id, user_id)values(2,2);
+insert into user_roles(role_id, user_id)values(2,2);
+insert into user_roles(role_id, user_id)values(1,3);
+
 
 
 

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,27 +35,44 @@ public class UserController {
 
     }
 
+    // @PostMapping("/users")
+    // public ResponseEntity<?> createUser(@Valid @RequestBody User user,
+    // BindingResult result) {
+    // if (result.hasFieldErrors()) {
+    // return myValidation(result);
+
+    // }
+
+    // return
+    // ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+    // }
+
     @PostMapping("/users")
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult result) {
-        if (result.hasFieldErrors()) {
-            return myValidation(result);
+    public User createUser(@Valid @RequestBody User user, BindingResult result) {
 
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+        return userService.save(user);
     }
 
-    private ResponseEntity<?> myValidation(BindingResult result) {
-        Map<String, String> errors = new HashMap<>();
+    @PostMapping("/register")
+    public User createUserNoAdmin(@Valid @RequestBody User user, BindingResult result) {
 
-        result.getFieldErrors().forEach(err -> {
+        user.setAdmin(false);
 
-            errors.put(err.getField(), "Value " + err.getField() + " " + err.getDefaultMessage());
-
-        });
-
-        return ResponseEntity.badRequest().body(errors);
-
+        return userService.save(user);
     }
+
+    // private ResponseEntity<?> myValidation(BindingResult result) {
+    // Map<String, String> errors = new HashMap<>();
+
+    // result.getFieldErrors().forEach(err -> {
+
+    // errors.put(err.getField(), "Value " + err.getField() + " " +
+    // err.getDefaultMessage());
+
+    // });
+
+    // return ResponseEntity.badRequest().body(errors);
+
+    // }
 
 }
